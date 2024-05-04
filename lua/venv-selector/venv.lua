@@ -117,16 +117,17 @@ function M.set_venv_and_system_paths(venv_row)
   local conda_base_path_std = config.settings.anaconda_base_path
   local conda_envs_path_std = config.settings.anaconda_envs_path
   -- Replace forward slash if we are on Windows
-  if vim.fn.has 'win32' then
-    venv_path_std = string.gsub(venv_path_std, '/', '\\')
-    conda_base_path_std = string.gsub(conda_base_path_std, '/', '\\')
-    conda_envs_path_std = string.gsub(conda_envs_path_std, '/', '\\')
-  end
+  -- if vim.fn.has 'win32' then
+  --   venv_path_std = string.gsub(venv_path_std, '/', '\\')
+  --   conda_base_path_std = string.gsub(conda_base_path_std, '/', '\\')
+  --   conda_envs_path_std = string.gsub(conda_envs_path_std, '/', '\\')
+  -- end
   -- Set CONDA_PREFIX instead if a conda environment is activated. This should work on Linux, Windows, or Mac, and is useful for conda users.
   local is_conda_base = string.find(venv_path_std, conda_base_path_std)
   local is_conda_env = string.find(venv_path_std, conda_envs_path_std)
   if is_conda_base == 1 or is_conda_env == 1 then
     vim.fn.setenv('CONDA_PREFIX', venv_path_std)
+    vim.fn.setenv('VIRTUAL_ENV', venv_path_std)
   else
     vim.fn.setenv('VIRTUAL_ENV', venv_path_std)
   end
